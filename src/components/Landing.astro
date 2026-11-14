@@ -1,0 +1,470 @@
+---
+import '@fontsource/unbounded/600.css';
+import '@fontsource/unbounded/800.css';
+import '@fontsource/ibm-plex-sans/400.css';
+import '@fontsource/ibm-plex-sans/600.css';
+import '@fontsource/ibm-plex-mono/400.css';
+
+interface Props { lang: 'zh' | 'en' }
+const { lang } = Astro.props;
+const base = lang === 'zh' ? '' : '/en';
+const t = {
+	zh: {
+		htmlLang: 'zh-CN', switchLabel: 'EN', switchHref: '/en/',
+		nav: [['文档', '/guide/install/'], ['博物馆', '#museum'], ['开发者', '#dev'], ['GitHub', 'https://github.com/MujoVerse']],
+		kicker: 'MuJoCo × Minecraft · 开源模组系列',
+		title: ['真实的机器人，', '真实的物理，', '在你的世界里。'],
+		lede: '每个关节都由电机力矩驱动，每一步都由学习型控制器决定，MuJoCo 每 2 毫秒解一次接触。没有一帧是动画。',
+		cta1: '阅读文档', cta2: '即将开放下载',
+		chips: ['Fabric 1.21.1', 'Windows · Linux · macOS', '5 台实时机器人 + 33 款展品', '免费开源'],
+		hudRobot: 'T2 · 31 自由度 · WALK', hudCaption: 'WALK 控制器带球进门',
+		notAnim: '这一锤不是动画',
+		notAnimText: '物理重锤在命中点施加冲量，T2 倒地；学到的起身控制器接管身体，翻身、撑地、站起，再把控制交回 WALK。整个过程都是物理计算，没有预设关键帧。',
+		modsTitle: '四个模组，一个宇宙',
+		mods: [
+			['MujoCraft', '/icons/physics_hammer.png', '物理底座', '把 MuJoCo 接进 Minecraft：任何方块都能变成刚体；物理重锤、刚体装配杖；与瓦尔基里天空的船体相互碰撞。', '—'],
+			['MujoBots', '/icons/robot_capsule.png', '机器人', 'Booster T2、K1、T1，宇树 G1 与 Go1：五台实时物理机器人，各由学习型策略驱动；33 款展品配展台与信息卡；投影阴影，兼容 Iris 光影。', 'MujoCraft'],
+			['MinePilot', '/icons/t2_remote.png', '驾驶', '接管一台机器人，用 WASD 走、用鼠标转头，第一或第三人称，地面点选导航，倒地按 H 起身。也可以交给程序或 AI：本机 WebSocket 桥接、Python 包与 MCP 服务器。', 'MujoBots'],
+			['MineArena', '/icons/arena_capsule.png', '竞技', 'RoboCup 规则的机器人足球：内置官方 GameController，1v1 到 5v5；成年组 14 × 9 米球场，倒地的机器人由裁判按规则拾起。', 'MujoBots'],
+		],
+		dependsOn: '依赖',
+		museumTitle: 'MujoVerse 机器人博物馆',
+		museumText: '一份可以直接打开的存档。序厅讲机器人简史，三个展厅陈列 33 款机器人，物理实验室里可以自己装配刚体、挥锤、召唤实时机器人，"参考 vs 执行"展区对照 G1 的生成动作与物理执行。',
+		museumStats: [['33', '展品'], ['6', '展区'], ['0', '额外模组']],
+		museumNote: '原版方块版只需要四个模组；精装版附装饰模组与光影整合包。',
+		catalogueTitle: '机器人图鉴',
+		catalogueText: '来自 MuJoCo Menagerie 与 Booster booster_assets 的公开模型，逐一核对许可后收录，每台都随附原始 LICENSE。放下胶囊就是一台展品，右键切换动作，看向它就弹出信息卡。',
+		physicsTitle: '方块也有质量',
+		physicsText: '转台把金块甩出去，跷跷板上的方块来回滑动，400 kg 的箱子把冰面雪橇撞出 3.8 米：MuJoCo 刚体与瓦尔基里天空船体之间的双向接触，在 1.20.1 适配模块里实测。',
+		physicsCaps: ['转台 16 RPM', '箱子撞上雪橇', '跷跷板'],
+		liveTitle: '五台机器人，各有各的大脑',
+		liveText: '每台实时机器人都带着自己的学习型策略：T2 与 G1 走路、起身、带球；K1 与 T1 用 B-Human 2026 公开的网络行走和踢球；Go1 用 MuJoCo Playground 的摇杆策略。同一步物理里，它们互相碰撞、绊倒、再爬起来。',
+		liveClips: [
+			['k1-go1', 'Booster K1 与宇树 Go1 并肩走过大厅'],
+			['tower-fall', '物理重锤四连击：一整座刚体塔被推倒'],
+			['ai-drive', '由 agent 驾驶：语义指令走、转、导航到目标点'],
+			['replay', '左：生成的参考动作；右：SONIC 在物理里做出来的'],
+		],
+		arenaTitle: '把你的 3v3 策略带进来',
+		arenaText: 'Booster Champion 仿真赛的 3v3 示例策略（MIT，未改动一个字节）可以直接在 MineArena 里驱动 K1 与 T1：同样的 play(context, players, store)，同样的 GameController 状态。下面是一整场半场里的片段，双方都是 AI。',
+		arenaNote: 'MujoVerse 是独立的开源项目，与 Booster Robotics 无隶属关系。',
+		arenaLink: ['如何运行', '/guide/football/'],
+		devTitle: '给开发者',
+		devText: '机器人通过语义接口控制：认领控制权、在每个物理步里下达 walk / head / recover，拿到同一步的观测。下面这个控制源让机器人朝世界原点走。',
+		devNext: ['进程内 Java API', '现在可用'],
+		devSoon: ['Python 桥接 minepilot', '可用：WebSocket + JSON，只绑定本机，附 MCP 服务器'],
+		devRec: ['轨迹记录导出', '可用：qpos、动作、接触力，npz 格式'],
+		devLinks: [['从源码构建', '/dev/build/'], ['控制 API', '/dev/api/'], ['添加展品', '/dev/exhibits/']],
+		credits: '致谢：MuJoCo（Google DeepMind）· MuJoCo Menagerie · Booster Robotics · Unitree Robotics · B-Human · MuJoCo Playground · NVIDIA SONIC / ARDY · Fabric · RoboCup GameController',
+		footer: '代码采用 Apache-2.0；模型与权重各自保留原始许可，见各仓库 THIRD_PARTY_NOTICES。Minecraft 是 Mojang 的商标，本项目与 Mojang 无关。',
+	},
+	en: {
+		htmlLang: 'en', switchLabel: '中文', switchHref: '/',
+		nav: [['Docs', '/en/guide/install/'], ['Museum', '#museum'], ['Developers', '#dev'], ['GitHub', 'https://github.com/MujoVerse']],
+		kicker: 'MuJoCo × Minecraft · open-source mod series',
+		title: ['Real robots.', 'Real physics.', 'In your world.'],
+		lede: 'Every joint is driven by motor torque, every step chosen by a learned controller, and MuJoCo solves contacts every 2 ms. Not a single frame is animation.',
+		cta1: 'Read the docs', cta2: 'Downloads coming soon',
+		chips: ['Fabric 1.21.1', 'Windows · Linux · macOS', '5 live robots + 33 exhibits', 'Free & open source'],
+		hudRobot: 'T2 · 31 DoF · WALK', hudCaption: 'The WALK controller dribbles the ball into the goal',
+		notAnim: 'This hit is not an animation',
+		notAnimText: 'The physics hammer applies an impulse where it lands and T2 goes down. A learned get-up controller takes over the body, rolls, braces and stands, then hands control back to WALK — all simulated, no keyframes.',
+		modsTitle: 'Four mods, one universe',
+		mods: [
+			['MujoCraft', '/icons/physics_hammer.png', 'Physics', 'MuJoCo inside Minecraft: turn any blocks into a rigid body, swing the physics hammer, collide with Valkyrien Skies ships.', '—'],
+			['MujoBots', '/icons/robot_capsule.png', 'Robots', 'Booster T2, K1 and T1, Unitree G1 and Go1: five live physical robots, each driven by a learned policy; 33 exhibits with pedestals and info cards; pose-accurate shadows, Iris aware.', 'MujoCraft'],
+			['MinePilot', '/icons/t2_remote.png', 'Driving', 'Take over a robot: walk with WASD, look with the mouse, first or third person, point-and-go ground targets, press H to get up. Or hand it to a program or an AI: a localhost WebSocket bridge, a Python package and an MCP server.', 'MujoBots'],
+			['MineArena', '/icons/arena_capsule.png', 'Arena', 'RoboCup-style robot football with the official GameController embedded: 1v1 up to 5v5, an adult 14 × 9 m pitch, and a referee that picks up fallen robots by the rules.', 'MujoBots'],
+		],
+		dependsOn: 'needs',
+		museumTitle: 'The MujoVerse Museum of Robots',
+		museumText: 'A world you can just open. A history wing, three halls with 33 robots, a physics lab where you assemble rigid bodies, swing the hammer and summon live robots, and a gallery comparing G1’s generated motion with its physical execution.',
+		museumStats: [['33', 'exhibits'], ['6', 'wings'], ['0', 'extra mods']],
+		museumNote: 'The vanilla-block edition needs only the four mods; the deluxe edition adds decoration mods and shaders as a modpack.',
+		catalogueTitle: 'Robot catalogue',
+		catalogueText: 'Public robot descriptions from MuJoCo Menagerie and Booster’s booster_assets, each licence checked and shipped with its original LICENSE. Place a capsule to get an exhibit, right-click to change its motion, look at it for the info card.',
+		physicsTitle: 'Blocks have mass',
+		physicsText: 'A turntable flings gold blocks off its deck, blocks slide across a see-saw, a 400 kg crate pushes an ice sled 3.8 m: two-way contact between MuJoCo bodies and Valkyrien Skies ships, measured in the 1.20.1 bridge.',
+		physicsCaps: ['Turntable at 16 RPM', 'Crate hits the sled', 'See-saw'],
+		liveTitle: 'Five robots, five brains',
+		liveText: 'Each live robot carries its own learned policy: T2 and G1 walk, get up and dribble; K1 and T1 walk and kick with networks from the B-Human 2026 code release; Go1 runs the MuJoCo Playground joystick policy. In the same physics step they bump, trip and get back up.',
+		liveClips: [
+			['k1-go1', 'Booster K1 and Unitree Go1 walk through the lobby'],
+			['tower-fall', 'Four hits with the physics hammer topple a rigid tower'],
+			['ai-drive', 'Driven by an agent: semantic walk, turn and go-to-target commands'],
+			['replay', 'Left: generated reference motion. Right: SONIC doing it in physics'],
+		],
+		arenaTitle: 'Bring your 3v3 strategy',
+		arenaText: 'The Booster Champion simulation 3v3 example strategy (MIT, not a single byte changed) drives K1 and T1 in MineArena directly: the same play(context, players, store), the same GameController state. Below, a stretch of a full half, AI on both sides.',
+		arenaNote: 'MujoVerse is an independent open-source project, not affiliated with Booster Robotics.',
+		arenaLink: ['How to run it', '/en/guide/football/'],
+		devTitle: 'For developers',
+		devText: 'Robots are controlled through a semantic API: claim control, issue walk / head / recover each physics step, read the same step’s observation. This control source walks a robot toward the world origin.',
+		devNext: ['In-process Java API', 'available now'],
+		devSoon: ['Python bridge minepilot', 'available: WebSocket + JSON, localhost only, with an MCP server'],
+		devRec: ['Trajectory recording', 'available: qpos, actions, contact forces as npz'],
+		devLinks: [['Build from source', '/en/dev/build/'], ['Control API', '/en/dev/api/'], ['Add an exhibit', '/en/dev/exhibits/']],
+		credits: 'Credits: MuJoCo (Google DeepMind) · MuJoCo Menagerie · Booster Robotics · Unitree Robotics · B-Human · MuJoCo Playground · NVIDIA SONIC / ARDY · Fabric · RoboCup GameController',
+		footer: 'Code under Apache-2.0; models and weights keep their own licences, see each repository’s THIRD_PARTY_NOTICES. Minecraft is a trademark of Mojang; this project is not affiliated with Mojang.',
+	},
+}[lang];
+const docs = (p: string) => p;
+const frames = ['0.0', '0.8', '2.0', '3.2', '4.8', '5.6', '6.4'];
+---
+<!doctype html>
+<html lang={t.htmlLang}>
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>MujoVerse — {t.title.join(' ')}</title>
+	<meta name="description" content={t.lede} />
+	<link rel="icon" href="/favicon-48.png" type="image/png" />
+	<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+	<meta property="og:image" content="https://mujoverse.github.io/media/museum-lobby-shaders.webp" />
+</head>
+<body>
+	<div class="grain" aria-hidden="true"></div>
+	<header class="bar">
+		<a class="brand" href={lang === 'zh' ? '/' : '/en/'}>
+			<img src="/avatar-256.png" alt="" width="30" height="30" /><span>MujoVerse</span>
+		</a>
+		<nav>
+			{t.nav.map(([label, href]) => <a href={href}>{label}</a>)}
+			<a class="lang" href={t.switchHref}>{t.switchLabel}</a>
+		</nav>
+	</header>
+
+	<main>
+		<section class="hero">
+			<div class="hero-copy">
+				<p class="kicker">{t.kicker}</p>
+				<h1>{t.title.map((line, i) => <span style={`--d:${i * 120}ms`}>{line}</span>)}</h1>
+				<p class="lede">{t.lede}</p>
+				<div class="ctas">
+					<a class="btn primary" href={docs(`${base}/guide/install/`)}>{t.cta1} →</a>
+					<span class="btn soon" aria-disabled="true">{t.cta2}</span>
+				</div>
+				<ul class="chips">{t.chips.map((c) => <li>{c}</li>)}</ul>
+			</div>
+			<div class="monitor-wrap">
+			<figure class="monitor">
+				<video src="/media/dribble.mp4" poster="/media/live-robots.webp" autoplay muted loop playsinline></video>
+				<div class="hud" aria-hidden="true">
+					<span class="tl">SIM <b id="simt">0.000</b> s</span>
+					<span class="tr">STEP <b id="steps">0</b></span>
+					<span class="bl">PHYSICS 2 ms · POLICY 50 Hz</span>
+					<span class="br">{t.hudRobot}</span>
+					<i class="corner c1"></i><i class="corner c2"></i><i class="corner c3"></i><i class="corner c4"></i>
+				</div>
+			</figure>
+			<p class="monitor-caption">{t.hudCaption}</p>
+			</div>
+		</section>
+
+		<section class="strip">
+			<h2>{t.notAnim}</h2>
+			<p>{t.notAnimText}</p>
+			<ol class="film">
+				{frames.map((s, i) => (
+					<li style={`--i:${i}`}><img src={`/media/getup-${i}.webp`} alt="" loading="lazy" width="400" height="300" /><span>t = {s} s</span></li>
+				))}
+			</ol>
+		</section>
+
+		<section class="live">
+			<h2>{t.liveTitle}</h2>
+			<p>{t.liveText}</p>
+			<div class="reel">
+				{t.liveClips.map(([clip, cap], i) => (
+					<figure style={`--i:${i}`}>
+						<video src={`/media/${clip}.mp4`} poster={`/media/${clip}.webp`} muted loop playsinline preload="none" data-autoplay></video>
+						<figcaption><span class="idx">{String(i + 1).padStart(2, '0')}</span>{cap}</figcaption>
+					</figure>
+				))}
+			</div>
+		</section>
+
+		<section class="arena" id="arena">
+			<div class="arena-copy">
+				<p class="kicker">MineArena · 3v3</p>
+				<h2>{t.arenaTitle}</h2>
+				<p>{t.arenaText}</p>
+				<p class="note">{t.arenaNote}</p>
+				<a class="btn" href={docs(t.arenaLink[1])}>→ {t.arenaLink[0]}</a>
+			</div>
+			<figure class="pitch">
+				<video src="/media/football-3v3.mp4" poster="/media/football-3v3.webp" muted loop playsinline preload="none" data-autoplay></video>
+				<div class="scoreline" aria-hidden="true"><span>HOME</span><b>CHAMPION EXAMPLE</b><i>vs</i><b>BUILTIN AI</b><span>AWAY</span></div>
+			</figure>
+		</section>
+
+		<section class="mods">
+			<h2>{t.modsTitle}</h2>
+			<div class="grid">
+				{t.mods.map(([name, icon, role, text, dep]) => (
+					<article class="card">
+						<header><img class="px" src={icon} alt="" width="40" height="40" /><div><h3>{name}</h3><p class="role">{role}</p></div></header>
+						<p>{text}</p>
+						<p class="dep"><span>{t.dependsOn}</span> {dep}</p>
+					</article>
+				))}
+			</div>
+		</section>
+
+		<section class="museum" id="museum">
+			<div class="mosaic">
+				<img class="a" src="/media/museum-lobby-shaders.webp" alt="" loading="lazy" />
+				<img class="b" src="/media/hall-humanoid-shaders.webp" alt="" loading="lazy" />
+				<img class="c" src="/media/replay-gallery.webp" alt="" loading="lazy" />
+				<img class="d" src="/media/physics-lab.webp" alt="" loading="lazy" />
+			</div>
+			<div class="museum-copy">
+				<h2>{t.museumTitle}</h2>
+				<p>{t.museumText}</p>
+				<dl class="stats">{t.museumStats.map(([n, l]) => <div><dt>{n}</dt><dd>{l}</dd></div>)}</dl>
+				<p class="note">{t.museumNote}</p>
+				<a class="btn" href={docs(`${base}/guide/museum/`)}>→ {lang === 'zh' ? '博物馆指南' : 'Museum guide'}</a>
+			</div>
+		</section>
+
+		<section class="catalogue">
+			<div class="cat-copy"><h2>{t.catalogueTitle}</h2><p>{t.catalogueText}</p>
+				<img class="card-shot" src="/media/info-card.webp" alt="" loading="lazy" /></div>
+			<img class="cat-img" src="/media/exhibit-catalogue.webp" alt="" loading="lazy" />
+		</section>
+
+		<section class="physics">
+			<h2>{t.physicsTitle}</h2>
+			<p>{t.physicsText}</p>
+			<div class="trio">
+				{['vs2-turntable', 'vs2-sled', 'vs2-seesaw'].map((img, i) => (
+					<figure><img src={`/media/${img}.webp`} alt="" loading="lazy" /><figcaption>{t.physicsCaps[i]}</figcaption></figure>
+				))}
+			</div>
+		</section>
+
+		<section class="dev" id="dev">
+			<div>
+				<h2>{t.devTitle}</h2>
+				<p>{t.devText}</p>
+				<ul class="status">
+					<li><b>{t.devNext[0]}</b><span class="ok">{t.devNext[1]}</span></li>
+					<li><b>{t.devSoon[0]}</b><span>{t.devSoon[1]}</span></li>
+					<li><b>{t.devRec[0]}</b><span>{t.devRec[1]}</span></li>
+				</ul>
+				<p class="links">{t.devLinks.map(([l, h]) => <a href={docs(h)}>{l} →</a>)}</p>
+			</div>
+			<pre class="code"><code>{`public final class GoHome implements RobotControlSource {
+  @Override
+  public void beforeStep(RobotControlContext ctx) {
+    RobotObservation o = ctx.observation();
+    Vec3d p = o.rootPosition();
+    double heading = Math.atan2(p.z, -p.x);   // toward 0,0
+    double turn = MathHelper.wrapDegrees(
+        Math.toDegrees(heading - o.yaw())) / 45.0;
+    ctx.walk(p.horizontalLength() > 1 ? 0.6 : 0,
+             0, Math.clamp(turn, -1, 1));
+  }
+}
+
+// robot.claimControl(new GoHome());`}</code></pre>
+		</section>
+	</main>
+
+	<footer class="foot">
+		<p>{t.credits}</p>
+		<p class="fine">{t.footer}</p>
+	</footer>
+
+	<script>
+		const sim = document.getElementById('simt');
+		const steps = document.getElementById('steps');
+		const start = performance.now();
+		const tick = () => {
+			const s = (performance.now() - start) / 1000;
+			if (sim) sim.textContent = s.toFixed(3);
+			if (steps) steps.textContent = Math.floor(s * 500).toLocaleString('en');
+			requestAnimationFrame(tick);
+		};
+		if (!matchMedia('(prefers-reduced-motion: reduce)').matches) requestAnimationFrame(tick);
+		// Clips load lazily and play only while visible (saves bandwidth and battery).
+		const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+		const io = new IntersectionObserver((entries) => {
+			for (const e of entries) {
+				const v = e.target;
+				if (v.tagName === 'VIDEO') {
+					if (e.isIntersecting && !reduce) { v.preload = 'auto'; v.play().catch(() => {}); } else v.pause();
+				} else if (e.isIntersecting) v.classList.add('seen');
+			}
+		}, { threshold: 0.25 });
+		document.querySelectorAll('video[data-autoplay], .reel').forEach((el) => io.observe(el));
+	</script>
+</body>
+</html>
+
+<style is:global>
+	:root {
+		--g0: #0d1013; --g1: #14181d; --g2: #1c2229; --line: #2a323b;
+		--teal: #3fd8c8; --teal2: #20a397; --amber: #f2c27b; --ink: #e8edf2; --muted: #95a2af;
+		--display: 'Unbounded', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+		--body: 'IBM Plex Sans', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+		--mono: 'IBM Plex Mono', ui-monospace, monospace;
+	}
+	* { box-sizing: border-box; }
+	html { background: var(--g0); color: var(--ink); scroll-behavior: smooth; }
+	body {
+		margin: 0; font: 400 17px/1.65 var(--body);
+		background:
+			radial-gradient(1200px 600px at 75% -10%, rgba(63, 216, 200, .14), transparent 60%),
+			radial-gradient(900px 500px at -10% 40%, rgba(242, 194, 123, .07), transparent 60%),
+			repeating-linear-gradient(30deg, transparent 0 46px, rgba(255,255,255,.028) 46px 47px),
+			repeating-linear-gradient(150deg, transparent 0 46px, rgba(255,255,255,.028) 46px 47px),
+			var(--g0);
+	}
+	.grain { position: fixed; inset: 0; pointer-events: none; opacity: .07; z-index: 50;
+		background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+	a { color: inherit; }
+	h1, h2, h3 { font-family: var(--display); letter-spacing: -.015em; margin: 0; }
+	h2 { font-weight: 800; font-size: clamp(1.7rem, 3.2vw, 2.6rem); line-height: 1.15; }
+	section { max-width: 1240px; margin: 0 auto; padding: 96px 28px; }
+	section > p { max-width: 62ch; color: var(--muted); }
+
+	.bar { position: sticky; top: 0; z-index: 40; display: flex; justify-content: space-between; align-items: center;
+		padding: 14px 28px; background: rgba(13,16,19,.72); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+	.brand { display: flex; gap: 10px; align-items: center; text-decoration: none; font: 800 1.05rem var(--display); }
+	.bar nav { display: flex; gap: 22px; font: 400 .9rem var(--mono); }
+	.bar nav a { text-decoration: none; color: var(--muted); }
+	.bar nav a:hover { color: var(--teal); }
+	.bar .lang { border: 1px solid var(--line); padding: 2px 10px; border-radius: 999px; }
+
+	.hero { display: grid; grid-template-columns: 1.02fr 1.18fr; gap: 56px; align-items: center; padding-top: 72px; }
+	.kicker { font: 400 .82rem var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--teal); }
+	.hero h1 { font-weight: 800; font-size: clamp(2.3rem, 5.2vw, 4.4rem); line-height: 1.04; margin: 14px 0 22px; }
+	.hero h1 span { display: block; opacity: 0; transform: translateY(14px); animation: rise .8s cubic-bezier(.2,.7,.2,1) forwards; animation-delay: var(--d); }
+	.hero h1 span:last-child { color: var(--teal); }
+	@keyframes rise { to { opacity: 1; transform: none; } }
+	.lede { color: var(--muted); max-width: 46ch; font-size: 1.08rem; }
+	.ctas { display: flex; gap: 14px; margin: 30px 0 22px; flex-wrap: wrap; }
+	.btn { display: inline-block; padding: 12px 20px; border: 1px solid var(--line); border-radius: 10px; text-decoration: none;
+		font: 600 .95rem var(--body); transition: transform .15s, border-color .15s, background .15s; }
+	.btn:hover { transform: translateY(-2px); border-color: var(--teal); }
+	.btn.primary { background: var(--teal); color: #062522; border-color: var(--teal); }
+	.btn.soon { cursor: default; color: var(--muted); border-style: dashed; }
+	.btn.soon:hover { transform: none; border-color: var(--line); }
+	.chips { display: flex; flex-wrap: wrap; gap: 8px; padding: 0; margin: 0; list-style: none; }
+	.chips li { font: 400 .78rem var(--mono); color: var(--muted); border: 1px dashed var(--line); padding: 3px 10px; border-radius: 6px; }
+
+	.monitor { position: relative; margin: 0; border-radius: 14px; overflow: hidden; border: 1px solid var(--line);
+		box-shadow: 0 40px 80px -30px rgba(0,0,0,.8), 0 0 0 6px rgba(63,216,200,.06); transform: perspective(1400px) rotateY(-4deg) rotateX(1.5deg); }
+	.monitor video { display: block; width: 100%; aspect-ratio: 16/9; object-fit: cover; background: #000; }
+	.hud { position: absolute; inset: 0; pointer-events: none; font: 400 .74rem var(--mono); color: #d9fffb; text-shadow: 0 1px 2px #000; }
+	.hud span { position: absolute; padding: 10px 14px; letter-spacing: .06em; }
+	.hud b { color: var(--teal); font-weight: 400; }
+	.tl { top: 0; left: 0; } .tr { top: 0; right: 0; } .bl { bottom: 0; left: 0; color: var(--amber); } .br { bottom: 0; right: 0; }
+	.corner { position: absolute; width: 18px; height: 18px; border: 2px solid var(--teal); opacity: .8; }
+	.c1 { top: 8px; left: 8px; border-right: 0; border-bottom: 0; } .c2 { top: 8px; right: 8px; border-left: 0; border-bottom: 0; }
+	.c3 { bottom: 8px; left: 8px; border-right: 0; border-top: 0; } .c4 { bottom: 8px; right: 8px; border-left: 0; border-top: 0; }
+	.monitor-caption { font: 400 .78rem var(--mono); color: var(--muted); margin: 14px 4px 0; }
+
+	.film { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; padding: 0; margin: 36px 0 0; list-style: none; counter-reset: f; }
+	.film li { position: relative; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; background: var(--g1);
+		opacity: 0; animation: rise .7s ease forwards; animation-delay: calc(var(--i) * 90ms + 200ms); }
+	.film img { display: block; width: 100%; height: auto; aspect-ratio: 4/3; object-fit: cover; filter: saturate(.9) contrast(1.05); }
+	.film span { position: absolute; left: 6px; bottom: 6px; font: 400 .72rem var(--mono); background: rgba(0,0,0,.6); padding: 1px 6px; border-radius: 4px; color: var(--amber); }
+
+	.mods .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-top: 36px; }
+	.card { background: linear-gradient(180deg, var(--g2), var(--g1)); border: 1px solid var(--line); border-radius: 14px; padding: 22px;
+		display: flex; flex-direction: column; gap: 10px; transition: border-color .2s, transform .2s; }
+	.card:hover { border-color: var(--teal); transform: translateY(-3px); }
+	.card header { display: flex; gap: 14px; align-items: center; }
+	.card h3 { font-size: 1.12rem; font-weight: 600; }
+	.px { image-rendering: pixelated; background: #0b0e11; border: 1px solid var(--line); border-radius: 8px; padding: 4px; width: 48px; height: 48px; }
+	.role { margin: 0; font: 400 .78rem var(--mono); color: var(--teal); }
+	.card > p { margin: 0; color: var(--muted); font-size: .95rem; }
+	.dep { margin-top: auto !important; font: 400 .76rem var(--mono); }
+	.dep span { color: var(--amber); }
+
+	.museum { display: grid; grid-template-columns: 1.4fr 1fr; gap: 48px; align-items: center; }
+	.mosaic { display: grid; grid-template-columns: 1.3fr 1fr; grid-template-rows: repeat(3, 1fr); gap: 10px; aspect-ratio: 4/3; }
+	.mosaic img { width: 100%; height: 100%; object-fit: cover; border-radius: 10px; border: 1px solid var(--line); }
+	.mosaic .a { grid-row: span 3; }
+	.museum-copy p { color: var(--muted); }
+	.stats { display: flex; gap: 28px; margin: 24px 0; }
+	.stats div { border-left: 2px solid var(--teal); padding-left: 12px; }
+	.stats dt { font: 800 2rem/1 var(--display); }
+	.stats dd { margin: 4px 0 0; font: 400 .78rem var(--mono); color: var(--muted); }
+	.note { font-size: .9rem; }
+
+	.catalogue { display: grid; grid-template-columns: 1fr 1.6fr; gap: 40px; align-items: start; }
+	.cat-copy p { color: var(--muted); }
+	.cat-img { width: 100%; border-radius: 12px; border: 1px solid var(--line); background: #e9ecef; }
+	.card-shot { width: 100%; margin-top: 16px; border-radius: 10px; border: 1px solid var(--line); }
+
+	.trio { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 30px; }
+	.trio figure { margin: 0; }
+	.trio img { width: 100%; aspect-ratio: 16/10; object-fit: cover; border-radius: 10px; border: 1px solid var(--line); }
+	.trio figcaption { font: 400 .78rem var(--mono); color: var(--muted); padding-top: 6px; }
+
+	.dev { display: grid; grid-template-columns: 1fr 1.1fr; gap: 44px; align-items: center; }
+	.dev p { color: var(--muted); }
+	.status { list-style: none; padding: 0; margin: 20px 0; display: grid; gap: 10px; }
+	.status li { display: flex; justify-content: space-between; gap: 12px; border-bottom: 1px dashed var(--line); padding-bottom: 8px; }
+	.status span { font: 400 .8rem var(--mono); color: var(--amber); text-align: right; }
+	.status span.ok { color: var(--teal); }
+	.links { display: flex; gap: 18px; flex-wrap: wrap; font: 400 .9rem var(--mono); }
+	.links a { text-decoration: none; color: var(--teal); }
+	.code { margin: 0; background: #0a0d10; border: 1px solid var(--line); border-radius: 12px; padding: 22px; overflow-x: auto;
+		font: 400 .84rem/1.6 var(--mono); color: #cfe9e5; box-shadow: inset 0 0 0 1px rgba(63,216,200,.05); }
+
+	.foot { border-top: 1px solid var(--line); padding: 40px 28px 60px; max-width: 1240px; margin: 0 auto; color: var(--muted); font-size: .88rem; }
+	.foot .fine { font-size: .8rem; opacity: .8; }
+
+	/* live robots: a 2x2 reel of muted loops that play only while on screen */
+	.live > p { color: var(--muted); max-width: 64ch; }
+	.reel { display: grid; grid-template-columns: 1.35fr 1fr 1fr; grid-template-rows: auto auto; gap: 14px; margin-top: 36px; }
+	.reel figure { margin: 0; position: relative; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: #000;
+		opacity: 0; transform: translateY(18px); transition: opacity .7s ease, transform .7s cubic-bezier(.2,.7,.2,1), border-color .25s;
+		transition-delay: calc(var(--i) * 90ms); }
+	.reel.seen figure { opacity: 1; transform: none; }
+	.reel figure:nth-child(1) { grid-row: span 2; }
+	.reel figure:nth-child(4) { grid-column: 2 / span 2; }
+	.reel figure:hover { border-color: var(--teal); }
+	.reel video { display: block; width: 100%; height: 100%; aspect-ratio: 16/9; object-fit: cover; }
+	.reel figure:nth-child(1) video { aspect-ratio: auto; min-height: 100%; }
+	.reel figcaption { position: absolute; left: 0; right: 0; bottom: 0; padding: 26px 14px 10px; font: 400 .8rem var(--body);
+		color: var(--ink); background: linear-gradient(transparent, rgba(5,8,10,.86)); display: flex; gap: 10px; align-items: baseline; }
+	.reel .idx { font: 400 .72rem var(--mono); color: var(--teal); letter-spacing: .08em; }
+
+	/* arena: broadcast-style frame with a scoreline bug */
+	.arena { display: grid; grid-template-columns: 1fr 1.5fr; gap: 48px; align-items: center; }
+	.arena-copy > p:not(.kicker) { color: var(--muted); }
+	.arena .note { font: 400 .78rem var(--mono); color: var(--amber); opacity: .9; }
+	.pitch { position: relative; margin: 0; border-radius: 14px; overflow: hidden; border: 1px solid var(--line);
+		box-shadow: 0 30px 80px -40px rgba(63,216,200,.45); }
+	.pitch video { display: block; width: 100%; aspect-ratio: 16/9; object-fit: cover; background: #000; }
+	.scoreline { position: absolute; top: 14px; left: 50%; transform: translateX(-50%); display: flex; align-items: stretch;
+		font: 400 .7rem var(--mono); letter-spacing: .08em; border-radius: 6px; overflow: hidden; box-shadow: 0 4px 18px rgba(0,0,0,.5); white-space: nowrap; }
+	.scoreline > * { padding: 5px 10px; }
+	.scoreline span { background: var(--g0); color: var(--muted); }
+	.scoreline b { background: var(--teal); color: #062522; font-weight: 400; }
+	.scoreline b:last-of-type { background: var(--amber); color: #2b1d07; }
+	.scoreline i { background: var(--g2); color: var(--ink); font-style: normal; }
+
+	@media (max-width: 960px) {
+		.reel, .arena { grid-template-columns: 1fr; }
+		.reel figure:nth-child(1), .reel figure:nth-child(4) { grid-row: auto; grid-column: auto; }
+		.reel figure:nth-child(1) video { aspect-ratio: 16/9; min-height: 0; }
+		.scoreline span { display: none; }
+	}
+
+	@media (max-width: 960px) {
+		.hero, .museum, .catalogue, .dev { grid-template-columns: 1fr; }
+		.mods .grid { grid-template-columns: 1fr 1fr; }
+		.film { grid-template-columns: repeat(4, 1fr); }
+		.film li:nth-child(n+5) { display: none; }
+		.monitor { transform: none; }
+		.bar nav a:not(.lang):not(:last-of-type) { display: none; }
+	}
+	@media (max-width: 600px) { .mods .grid { grid-template-columns: 1fr; } }
+	@media (prefers-reduced-motion: reduce) { .reel figure { opacity: 1; transform: none; } .hero h1 span, .film li { animation: none; opacity: 1; transform: none; } }
+</style>

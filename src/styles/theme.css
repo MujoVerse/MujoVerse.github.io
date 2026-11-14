@@ -1,0 +1,41 @@
+/* MujoVerse — graphite lab notebook × voxel world */
+:root {
+	--mv-graphite-0: #0f1215;
+	--mv-graphite-1: #161a1f;
+	--mv-graphite-2: #1f252c;
+	--mv-line: #2c343d;
+	--mv-teal: #3fd8c8;
+	--mv-teal-dim: #1e7f77;
+	--mv-amber: #f2c27b;
+	--mv-ink: #e6ebf0;
+	--mv-muted: #93a0ad;
+	--sl-font: 'IBM Plex Sans', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans CJK SC', sans-serif;
+	--sl-font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+	--mv-display: 'Unbounded', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+}
+:root[data-theme='dark'] {
+	--sl-color-accent-low: #10302d;
+	--sl-color-accent: var(--mv-teal-dim);
+	--sl-color-accent-high: var(--mv-teal);
+	--sl-color-black: var(--mv-graphite-0);
+	--sl-color-gray-6: var(--mv-graphite-1);
+	--sl-color-gray-5: var(--mv-line);
+	--sl-color-white: var(--mv-ink);
+}
+:root[data-theme='light'] {
+	--sl-color-accent-low: #d5f5f1;
+	--sl-color-accent: #127068;
+	--sl-color-accent-high: #0b4a45;
+}
+.sl-markdown-content h1, .sl-markdown-content h2, h1#_top, .site-title {
+	font-family: var(--mv-display);
+	letter-spacing: -0.01em;
+}
+.site-title { font-weight: 800; }
+.sl-markdown-content kbd {
+	font-family: var(--sl-font-mono);
+	border: 1px solid var(--sl-color-gray-5);
+	border-bottom-width: 2px;
+	border-radius: 4px;
+	padding: 0 .35em;
+}

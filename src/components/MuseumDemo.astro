@@ -29,7 +29,7 @@ const t = zh ? {
 };
 const worldPath = '/worlds/museum-preview.zip';
 const client = new URL('https://v2.4.0.mcraft.fun/');
-client.searchParams.set('map', new URL(worldPath, Astro.site).href);
+client.searchParams.set('mapDir', new URL('/worlds/museum-preview/index.json', Astro.site).href);
 client.searchParams.set('noSave', 'true');
 client.searchParams.append('serverSetting', 'gameMode:2');
 client.searchParams.append('serverSetting', 'everybody-op:false');

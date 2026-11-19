@@ -4,6 +4,7 @@ import argparse
 import gzip
 import hashlib
 import io
+import json
 import struct
 import zlib
 from pathlib import Path
@@ -142,6 +143,16 @@ def main():
         blocks.update(region_blocks)
     if not {"minecraft:quartz_pillar", "minecraft:cyan_terracotta"} <= blocks:
         raise ValueError("The cropped area does not contain the built museum")
+    # The client can fetch this read-only index regardless of the host's ZIP MIME type.
+    directory = args.output.with_suffix("")
+    index = {"level.dat": None, "region": {}}
+    for name, contents in files.items():
+        target = directory / name
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_bytes(contents)
+        if name.startswith("region/"):
+            index["region"][target.name] = None
+    (directory / "index.json").write_text(json.dumps(index, indent=2) + "\n", encoding="ascii")
     archive = io.BytesIO()
     with ZipFile(archive, "w") as zipped:
         for name, contents in files.items():

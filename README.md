@@ -14,7 +14,7 @@ npm run build    # -> dist/
 
 ## Museum web preview
 
-`/demo/` and `/en/demo/` embed the upstream Minecraft Web Client v2.4.0 on demand. The site ships only the museum world export, not a copy of the game client or its assets. There is no multiplayer server or proxy. The game loads the world from the configured public site URL; for local world changes, drag the local ZIP into the upstream client to test before deploying.
+`/demo/` and `/en/demo/` embed the upstream Minecraft Web Client v2.4.0 on demand. The site ships only the museum world export, not a copy of the game client or its assets. There is no multiplayer server or proxy. The client loads the read-only `museum-preview/index.json` from the configured public site URL. The exporter also writes a ZIP for download and for testing local changes by dragging the file into the upstream client.
 
 To refresh it, use an already built **vanilla-block** museum save (not the deluxe world or a datapack bootstrap):
 

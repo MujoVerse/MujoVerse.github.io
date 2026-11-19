@@ -15,7 +15,7 @@ const t = {
 		kicker: 'MuJoCo × Minecraft · 开源模组系列',
 		title: ['真实的机器人，', '真实的物理，', '在你的世界里。'],
 		lede: '每个关节都由电机力矩驱动，每一步都由学习型控制器决定，MuJoCo 每 2 毫秒解一次接触。没有一帧是动画。',
-		cta1: '阅读文档', cta2: '即将开放下载',
+		cta1: '网页试玩', cta2: '阅读文档',
 		chips: ['Fabric 1.21.1', 'Windows · Linux · macOS', '5 台实时机器人 + 33 款展品', '免费开源'],
 		hudRobot: 'T2 · 31 自由度 · WALK', hudCaption: 'WALK 控制器带球进门',
 		notAnim: '这一锤不是动画',
@@ -32,6 +32,18 @@ const t = {
 		museumText: '一份可以直接打开的存档。序厅讲机器人简史，三个展厅陈列 33 款机器人，物理实验室里可以自己装配刚体、挥锤、召唤实时机器人，"参考 vs 执行"展区对照 G1 的生成动作与物理执行。',
 		museumStats: [['33', '展品'], ['6', '展区'], ['0', '额外模组']],
 		museumNote: '原版方块版只需要四个模组；精装版附装饰模组与光影整合包。',
+		museumWebNote: '网页试玩保留原版方块馆舍。机器人和物理机关请在桌面版体验。',
+		museumGuide: '博物馆指南',
+		fpvTitle: '从机身视角飞过展场',
+		fpvText: 'MujoBots 的四旋翼由四个电机施力，MinePilot 提供手飞。辅助模式松杆悬停，Acro 不自动回正；FPV 跟随机身俯仰和横滚，稳拍则保持地平线水平。',
+		fpvCaption: '开发版游戏实录：穿过青门，侧倾后切换到稳拍。',
+		fpvGuide: 'FPV 飞行指南',
+		newTitle: '开发版新进展',
+		collisionTitle: '实体碰撞与移动平台',
+		collisionText: '玩家可以推挤刚体，刚体可以推挤原版生物。玩家站在平台上会随它平移、升降和转动，跳起即可脱离。',
+		ragdollTitle: '可推挤的关节布娃娃',
+		ragdollText: '用 MuJoCo 联动求解肢体、关节和地形接触。布娃娃没有行走或起身控制器。',
+		toolsNote: 'MujoBots 遥控器加入只读关节与深度视图；F7 打开机器人图鉴。MineArena 的赛事管理界面可在比赛中查看状态并按权限管理。',
 		catalogueTitle: '机器人图鉴',
 		catalogueText: '来自 MuJoCo Menagerie 与 Booster booster_assets 的公开模型，逐一核对许可后收录，每台都随附原始 LICENSE。放下胶囊就是一台展品，右键切换动作，看向它就弹出信息卡。',
 		physicsTitle: '方块也有质量',
@@ -64,7 +76,7 @@ const t = {
 		kicker: 'MuJoCo × Minecraft · open-source mod series',
 		title: ['Real robots.', 'Real physics.', 'In your world.'],
 		lede: 'Every joint is driven by motor torque, every step chosen by a learned controller, and MuJoCo solves contacts every 2 ms. Not a single frame is animation.',
-		cta1: 'Read the docs', cta2: 'Downloads coming soon',
+		cta1: 'Play in browser', cta2: 'Read the docs',
 		chips: ['Fabric 1.21.1', 'Windows · Linux · macOS', '5 live robots + 33 exhibits', 'Free & open source'],
 		hudRobot: 'T2 · 31 DoF · WALK', hudCaption: 'The WALK controller dribbles the ball into the goal',
 		notAnim: 'This hit is not an animation',
@@ -81,6 +93,18 @@ const t = {
 		museumText: 'A world you can just open. A history wing, three halls with 33 robots, a physics lab where you assemble rigid bodies, swing the hammer and summon live robots, and a gallery comparing G1’s generated motion with its physical execution.',
 		museumStats: [['33', 'exhibits'], ['6', 'wings'], ['0', 'extra mods']],
 		museumNote: 'The vanilla-block edition needs only the four mods; the deluxe edition adds decoration mods and shaders as a modpack.',
+		museumWebNote: 'The browser demo includes the vanilla-block museum. Robot exhibits and physics interactions require the desktop mods.',
+		museumGuide: 'Museum guide',
+		fpvTitle: 'Fly the course in first person',
+		fpvText: 'Four motors drive the MujoBots quadrotor, and MinePilot lets you fly it. Assisted mode holds position after you release the controls; Acro does not self-level. The FPV camera follows the airframe while the stabilized camera keeps the horizon level.',
+		fpvCaption: 'In-game development capture: through the cyan gate, then from a bank into stabilized view.',
+		fpvGuide: 'FPV flight guide',
+		newTitle: 'New in Development',
+		collisionTitle: 'Entity collisions and moving platforms',
+		collisionText: 'Players can push rigid bodies, and rigid bodies can push vanilla mobs. Standing players follow a platform as it moves, lifts, and rotates; jumping detaches them.',
+		ragdollTitle: 'Articulated ragdolls',
+		ragdollText: 'MuJoCo solves limb, joint, and terrain contact together. These are physics props with no walking or recovery controller.',
+		toolsNote: 'The MujoBots remote adds read-only joint and depth views, and F7 opens the robot catalogue. MineArena exposes match status and permission-checked actions in its management screen.',
 		catalogueTitle: 'Robot catalogue',
 		catalogueText: 'Public robot descriptions from MuJoCo Menagerie and Booster’s booster_assets, each licence checked and shipped with its original LICENSE. Place a capsule to get an exhibit, right-click to change its motion, look at it for the info card.',
 		physicsTitle: 'Blocks have mass',
@@ -141,8 +165,8 @@ const frames = ['0.0', '0.8', '2.0', '3.2', '4.8', '5.6', '6.4'];
 				<h1>{t.title.map((line, i) => <span style={`--d:${i * 120}ms`}>{line}</span>)}</h1>
 				<p class="lede">{t.lede}</p>
 				<div class="ctas">
-					<a class="btn primary" href={docs(`${base}/guide/install/`)}>{t.cta1} →</a>
-					<span class="btn soon" aria-disabled="true">{t.cta2}</span>
+					<a class="btn primary" href={`${base}/demo/`}>{t.cta1} →</a>
+					<a class="btn" href={docs(`${base}/guide/install/`)}>{t.cta2}</a>
 				</div>
 				<ul class="chips">{t.chips.map((c) => <li>{c}</li>)}</ul>
 			</div>
@@ -159,6 +183,19 @@ const frames = ['0.0', '0.8', '2.0', '3.2', '4.8', '5.6', '6.4'];
 			</figure>
 			<p class="monitor-caption">{t.hudCaption}</p>
 			</div>
+		</section>
+
+		<section class="arena fpv" id="fpv">
+			<div class="arena-copy">
+				<p class="kicker">MujoBots × MinePilot · FPV</p>
+				<h2>{t.fpvTitle}</h2>
+				<p>{t.fpvText}</p>
+				<a class="btn" href={`${base}/guide/fpv/`}>{t.fpvGuide} →</a>
+			</div>
+			<figure class="new-media">
+				<video src="/media/fpv-flight.mp4" poster="/media/fpv-flight.webp" controls muted playsinline preload="none"></video>
+				<figcaption>{t.fpvCaption}</figcaption>
+			</figure>
 		</section>
 
 		<section class="strip">
@@ -222,8 +259,11 @@ const frames = ['0.0', '0.8', '2.0', '3.2', '4.8', '5.6', '6.4'];
 				<h2>{t.museumTitle}</h2>
 				<p>{t.museumText}</p>
 				<dl class="stats">{t.museumStats.map(([n, l]) => <div><dt>{n}</dt><dd>{l}</dd></div>)}</dl>
-				<p class="note">{t.museumNote}</p>
-				<a class="btn" href={docs(`${base}/guide/museum/`)}>→ {lang === 'zh' ? '博物馆指南' : 'Museum guide'}</a>
+				<p class="note">{t.museumNote} {t.museumWebNote}</p>
+				<div class="ctas">
+					<a class="btn primary" href={`${base}/demo/`}>{t.cta1} →</a>
+					<a class="btn" href={docs(`${base}/guide/museum/`)}>{t.museumGuide}</a>
+				</div>
 			</div>
 		</section>
 
@@ -241,6 +281,24 @@ const frames = ['0.0', '0.8', '2.0', '3.2', '4.8', '5.6', '6.4'];
 					<figure><img src={`/media/${img}.webp`} alt="" loading="lazy" /><figcaption>{t.physicsCaps[i]}</figcaption></figure>
 				))}
 			</div>
+		</section>
+
+		<section class="updates" id="updates">
+			<p class="kicker">MujoCraft · MujoBots · MineArena</p>
+			<h2>{t.newTitle}</h2>
+			<div class="update-grid">
+				<article>
+					<figure class="new-media"><img src="/media/moving-platform.webp" width="960" height="540" alt={t.collisionTitle} loading="lazy" /></figure>
+					<h3>{t.collisionTitle}</h3>
+					<p>{t.collisionText}</p>
+				</article>
+				<article>
+					<figure class="new-media"><video src="/media/ragdoll.mp4" poster="/media/ragdoll.webp" controls muted playsinline preload="none"></video></figure>
+					<h3>{t.ragdollTitle}</h3>
+					<p>{t.ragdollText}</p>
+				</article>
+			</div>
+			<p>{t.toolsNote}</p>
 		</section>
 
 		<section class="dev" id="dev">
@@ -349,8 +407,6 @@ const frames = ['0.0', '0.8', '2.0', '3.2', '4.8', '5.6', '6.4'];
 		font: 600 .95rem var(--body); transition: transform .15s, border-color .15s, background .15s; }
 	.btn:hover { transform: translateY(-2px); border-color: var(--teal); }
 	.btn.primary { background: var(--teal); color: #062522; border-color: var(--teal); }
-	.btn.soon { cursor: default; color: var(--muted); border-style: dashed; }
-	.btn.soon:hover { transform: none; border-color: var(--line); }
 	.chips { display: flex; flex-wrap: wrap; gap: 8px; padding: 0; margin: 0; list-style: none; }
 	.chips li { font: 400 .78rem var(--mono); color: var(--muted); border: 1px dashed var(--line); padding: 3px 10px; border-radius: 6px; }
 
@@ -394,6 +450,12 @@ const frames = ['0.0', '0.8', '2.0', '3.2', '4.8', '5.6', '6.4'];
 	.stats dt { font: 800 2rem/1 var(--display); }
 	.stats dd { margin: 4px 0 0; font: 400 .78rem var(--mono); color: var(--muted); }
 	.note { font-size: .9rem; }
+	.new-media { margin: 0; }
+	.new-media :is(img, video) { display: block; width: 100%; aspect-ratio: 16/9; height: auto; object-fit: contain; background: #080b0d; border: 1px solid var(--line); border-radius: 8px; }
+	.new-media figcaption { color: var(--muted); font-size: .875rem; margin-top: 8px; }
+	.update-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 26px; margin-top: 26px; }
+	.update-grid h3 { font-size: 1.12rem; letter-spacing: 0; margin-top: 14px; }
+	.update-grid p { color: var(--muted); }
 
 	.catalogue { display: grid; grid-template-columns: 1fr 1.6fr; gap: 40px; align-items: start; }
 	.cat-copy p { color: var(--muted); }
@@ -465,6 +527,9 @@ const frames = ['0.0', '0.8', '2.0', '3.2', '4.8', '5.6', '6.4'];
 		.monitor { transform: none; }
 		.bar nav a:not(.lang):not(:last-of-type) { display: none; }
 	}
-	@media (max-width: 600px) { .mods .grid { grid-template-columns: 1fr; } }
+	@media (max-width: 600px) {
+		.mods .grid, .update-grid { grid-template-columns: 1fr; }
+		.hud .bl, .hud .br { font-size: .6rem; padding: 8px 10px; }
+	}
 	@media (prefers-reduced-motion: reduce) { .reel figure { opacity: 1; transform: none; } .hero h1 span, .film li { animation: none; opacity: 1; transform: none; } }
 </style>

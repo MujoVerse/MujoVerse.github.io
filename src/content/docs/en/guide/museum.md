@@ -5,6 +5,8 @@ description: "The MujoVerse Robot Museum — two editions and what is inside."
 
 The MujoVerse Robot Museum is a ready-to-open Minecraft world, not a mod.
 
+**[Play in browser](/en/demo/)** to walk through the vanilla-block building. The sections below describe the full desktop edition; robot entities, physics exhibits and playback stands do not run in the web preview.
+
 ## Two editions
 
 | Edition | Needs | Best for |

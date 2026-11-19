@@ -32,6 +32,7 @@ export default defineConfig({
 						{ slug: 'guide/install' },
 						{ slug: 'guide/robots' },
 						{ slug: 'guide/driving' },
+						{ slug: 'guide/fpv' },
 						{ slug: 'guide/physics' },
 						{ slug: 'guide/exhibits' },
 						{ slug: 'guide/football' },

@@ -24,3 +24,7 @@ python scripts/export-museum-preview.py "/path/to/built/MujoVerse Museum" public
 ```
 
 The initial source was `MujoBots/.runtime/museum-hero/saves/MujoVerse Museum` in the development workspace. The export contains 130 terrain chunks, with placeholder blocks for robot pedestals and a synthetic spawn profile. No original player data, entities, signs, command data, custom assets or mod JARs are included. Do not replace it with a ZIP of the full source save.
+
+## Desktop museum
+
+Run `python scripts/package-desktop-museum.py <built-museum-save> <verified-release/mods> <output-directory>` with `nbtlib==2.0.4`. Use the same source save as the web preview, and the archived 0.5.0 build (November 15, 2026) with its `build-receipt.json`. The script produces a world ZIP for Pages and a `.mrpack` for GitHub Releases. It omits player history and replaces pre-0.5.0 calls in the lab with current commands. The included live robots are G1 and Go1; T2 firmware bundles are excluded. Import into a clean 1.21.1 / Fabric 0.16.10 / Java 21 instance before publishing any regenerated archives.

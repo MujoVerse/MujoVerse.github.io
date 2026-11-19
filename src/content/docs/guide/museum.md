@@ -1,20 +1,17 @@
 ---
 title: 博物馆存档
-description: "MujoVerse 机器人博物馆：两个版本与参观路线。"
+description: "下载 MujoVerse 桌面试玩整合包或独立存档，参观机器人博物馆。"
 ---
 
-MujoVerse 机器人博物馆是一份可以直接打开的 Minecraft 存档，不是模组。
+**[下载桌面试玩整合包（.mrpack）](https://github.com/MujoVerse/MujoVerse.github.io/releases/download/museum-1.21.1-preview.1/MujoVerse-Museum-1.21.1-preview.1.mrpack)** · **[只下载存档（ZIP）](/worlds/MujoVerse-Museum-1.21.1-preview.1-world.zip)** · [网页参观](/demo/)
 
-**[网页试玩](/demo/)** 可以直接参观原版方块馆舍。下面介绍的是桌面完整版：机器人实体、物理机关和回放展台不会在浏览器里运行。
+## 安装试玩
 
-## 两个版本
+1. 用 Modrinth App 或 Prism Launcher 将 `.mrpack` 导入为**新实例**。需要 Minecraft Java **1.21.1**、Java **21**，建议分配 **4 GB** 内存。
+2. 启动后在「单人游戏」打开 **MujoVerse Museum**，从入口广场进馆。
+3. 已有匹配实例的玩家可只下载 ZIP，把解压后的 `MujoVerse Museum` 文件夹放到实例的 `saves/`。存档 ZIP 不包含模组；需要 Fabric Loader 0.16.10、Fabric API、MujoCraft 0.3.1、MujoBots 0.5.0、MinePilot 和 MineArena 0.1.0，以及 `exhibits`、`g1`、`go1`、`onnxruntime` 配套包。
 
-| 版本 | 需要什么 | 适合 |
-|---|---|---|
-| **原版方块版** | 四个 MujoVerse 模组 + Fabric API | 配置低、只想快速看看 |
-| **精装版** | Modrinth 整合包，自动安装装饰模组和 Complementary 光影 | 想看最好的画面 |
-
-精装版用到 Macaw's、Handcrafted 等装饰模组和 Sodium、Iris。这些模组由整合包从 Modrinth 下载，不包含在我们的文件里；光影需要一块独立显卡才流畅。
+此下载为 **原版方块馆舍的桌面预览版**：包含模组与存档，不包含 Minecraft 游戏本体、精装光影、实时 T2 固件权重或开发中的 FPV 飞行功能。网页参观版不运行模组。
 
 ## 展区
 
@@ -26,7 +23,7 @@ MujoVerse 机器人博物馆是一份可以直接打开的 Minecraft 存档，�
 - **物理实验室**：
   - 按按钮领取物理重锤和刚体装配杖；
   - 敲倒刚体塔，再按按钮一键重置；
-  - 召唤实时物理的 G1 和 T2，用重锤推它们，摔倒的 T2 会自己爬起来。
-- **示范 vs 真做**：左边的 G1 播放预先算好的示范动作，右边的 G1 在物理世界里真的照着做；按台边按钮让两边同步重播，看看哪里不一样。
+  - 召唤实时物理的 Unitree G1 和 Go1，用台上的按钮让它们行走、停下或收起。
+- **示范 vs 真做**：对照 G1 的生成参考与当时在 MuJoCo 中实际执行的动作。这两个展台展示的是动作回放，和实验室的实时机器人分开。
 
 看向任何展品都会弹出信息卡。馆里的机关全部用模组的普通功能搭成，你也可以在自己的世界里搭一座。

@@ -1,20 +1,17 @@
 ---
 title: Museum world
-description: "The MujoVerse Robot Museum — two editions and what is inside."
+description: "Download the MujoVerse desktop demo pack or standalone museum save."
 ---
 
-The MujoVerse Robot Museum is a ready-to-open Minecraft world, not a mod.
+**[Download the desktop pack (.mrpack)](https://github.com/MujoVerse/MujoVerse.github.io/releases/download/museum-1.21.1-preview.1/MujoVerse-Museum-1.21.1-preview.1.mrpack)** · **[Download world only (ZIP)](/worlds/MujoVerse-Museum-1.21.1-preview.1-world.zip)** · [Visit in browser](/en/demo/)
 
-**[Play in browser](/en/demo/)** to walk through the vanilla-block building. The sections below describe the full desktop edition; robot entities, physics exhibits and playback stands do not run in the web preview.
+## Install the preview
 
-## Two editions
+1. Import the `.mrpack` as a **new instance** in Modrinth App or Prism Launcher. Use Minecraft Java **1.21.1**, Java **21**, and about **4 GB** of game memory.
+2. Start the instance and open **MujoVerse Museum** in Singleplayer to spawn on the entrance plaza.
+3. For a matching instance, extract the world ZIP and put `MujoVerse Museum` in `saves/`. The ZIP does not include mods. It requires Fabric Loader 0.16.10, Fabric API, MujoCraft 0.3.1, MujoBots 0.5.0, MinePilot and MineArena 0.1.0, plus the `exhibits`, `g1`, `go1`, and `onnxruntime` packs.
 
-| Edition | Needs | Best for |
-|---|---|---|
-| **Vanilla-block** | the four MujoVerse mods + Fabric API | modest PCs, a quick look |
-| **Deluxe** | a Modrinth modpack that installs decoration mods and the Complementary shaders | the best visuals |
-
-The deluxe edition uses decoration mods such as Macaw's and Handcrafted, plus Sodium and Iris. The modpack downloads them from Modrinth; they are not part of our files. Shaders need a dedicated GPU to run smoothly.
+This is the **vanilla-block desktop preview**. It includes mods and the save, not Minecraft itself, deluxe shaders, live T2 firmware weights, or the in-development FPV flight feature. The separate browser preview does not run mods.
 
 ## Halls
 
@@ -26,7 +23,7 @@ The deluxe edition uses decoration mods such as Macaw's and Handcrafted, plus So
 - **Physics lab**:
   - press buttons to get the Physics Hammer and the Assembly Wand;
   - knock over the rigid-body towers, then reset them with one button;
-  - summon a live G1 and T2 and push them with the hammer — a fallen T2 gets back up.
-- **Demo vs the real thing**: the left G1 plays a precomputed demo motion; the right G1 actually performs it in physics. Press the button at the stand to replay both in sync and spot the differences.
+  - summon live Unitree G1 and Go1 robots; use the console to walk, stop or remove them.
+- **Reference vs execution**: compare G1's generated reference motion with recorded MuJoCo execution. Both displays are playback, separate from the live robots in the lab.
 
 Look at any exhibit for its info card. Every mechanism in the museum is built from ordinary mod features, so you can build one in your own world.

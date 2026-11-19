@@ -31,9 +31,9 @@ const t = {
 		museumTitle: 'MujoVerse 机器人博物馆',
 		museumText: '一份可以直接打开的存档。序厅讲机器人简史，三个展厅陈列 33 款机器人，物理实验室里可以自己装配刚体、挥锤、召唤实时机器人，"参考 vs 执行"展区对照 G1 的生成动作与物理执行。',
 		museumStats: [['33', '展品'], ['6', '展区'], ['0', '额外模组']],
-		museumNote: '原版方块版只需要四个模组；精装版附装饰模组与光影整合包。',
+		museumNote: '桌面试玩包内置展品、G1 和 Go1，在物理实验室可以重置刚体塔并召唤机器人。',
 		museumWebNote: '网页试玩保留原版方块馆舍。机器人和物理机关请在桌面版体验。',
-		museumGuide: '博物馆指南',
+		museumGuide: '下载桌面试玩',
 		fpvTitle: '从机身视角飞过展场',
 		fpvText: 'MujoBots 的四旋翼由四个电机施力，MinePilot 提供手飞。辅助模式松杆悬停，Acro 不自动回正；FPV 跟随机身俯仰和横滚，稳拍则保持地平线水平。',
 		fpvCaption: '开发版游戏实录：穿过青门，侧倾后切换到稳拍。',
@@ -92,9 +92,9 @@ const t = {
 		museumTitle: 'The MujoVerse Museum of Robots',
 		museumText: 'A world you can just open. A history wing, three halls with 33 robots, a physics lab where you assemble rigid bodies, swing the hammer and summon live robots, and a gallery comparing G1’s generated motion with its physical execution.',
 		museumStats: [['33', 'exhibits'], ['6', 'wings'], ['0', 'extra mods']],
-		museumNote: 'The vanilla-block edition needs only the four mods; the deluxe edition adds decoration mods and shaders as a modpack.',
+		museumNote: 'The desktop preview includes the exhibits, G1 and Go1. Visit the physics lab to reset the rigid-body towers and spawn the live robots.',
 		museumWebNote: 'The browser demo includes the vanilla-block museum. Robot exhibits and physics interactions require the desktop mods.',
-		museumGuide: 'Museum guide',
+		museumGuide: 'Download desktop demo',
 		fpvTitle: 'Fly the course in first person',
 		fpvText: 'Four motors drive the MujoBots quadrotor, and MinePilot lets you fly it. Assisted mode holds position after you release the controls; Acro does not self-level. The FPV camera follows the airframe while the stabilized camera keeps the horizon level.',
 		fpvCaption: 'In-game development capture: through the cyan gate, then from a bank into stabilized view.',
@@ -166,6 +166,7 @@ const frames = ['0.0', '0.8', '2.0', '3.2', '4.8', '5.6', '6.4'];
 				<p class="lede">{t.lede}</p>
 				<div class="ctas">
 					<a class="btn primary" href={`${base}/demo/`}>{t.cta1} →</a>
+					<a class="btn" href={`${base}/guide/museum/`}>{t.museumGuide}</a>
 					<a class="btn" href={docs(`${base}/guide/install/`)}>{t.cta2}</a>
 				</div>
 				<ul class="chips">{t.chips.map((c) => <li>{c}</li>)}</ul>

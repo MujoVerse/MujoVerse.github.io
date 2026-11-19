@@ -38,10 +38,7 @@ The neural-network runtime used by G1, K1, T1 and Go1 needs the Microsoft Visual
 
 ## Option 2: the museum
 
-To see what the mods can do first, install the museum. It comes in two editions; see [Museum world](/en/guide/museum/):
-
-- **Vanilla-block edition**: a world folder. Drop it into `saves/`; it needs only the four mods.
-- **Deluxe edition**: a Modrinth modpack (`.mrpack`). Import it into Modrinth App or Prism and it downloads the decoration mods and shaders for you.
+Start with the [Museum desktop preview](/en/guide/museum/). Import its `.mrpack` as a new instance to get the save and matching mods, or download the world ZIP for an instance that already has those mods installed.
 
 ## FAQ
 

@@ -1,4 +1,4 @@
-"""Export a public, terrain-only 1.21.1 museum or Full Tour world."""
+"""Export the public, terrain-only 1.21.1 museum world from a built save."""
 
 import argparse
 import gzip
@@ -15,33 +15,20 @@ import nbtlib
 
 SECTOR = 4096
 DATA_VERSION = 3955
+ENTRANCE = (0.5, 65, 21.5)
 LEVEL_FIELDS = ("Version", "DataVersion", "version", "WorldGenSettings", "initialized")
 CHUNK_FIELDS = (
     "DataVersion", "Status", "xPos", "yPos", "zPos", "sections", "Heightmaps", "isLightOn",
 )
+# The museum, plaza and a walkable margin around the vanilla-block building.
+CHUNK_X = range(-5, 5)
+CHUNK_Z = range(-8, 5)
 REPLACE_BLOCKS = {
     "mujobots:robot_pedestal": "minecraft:smooth_stone",
     "minecraft:command_block": "minecraft:air",
     "minecraft:chain_command_block": "minecraft:air",
     "minecraft:repeating_command_block": "minecraft:air",
     "minecraft:structure_block": "minecraft:air",
-}
-MUSEUM = {
-    "name": "MujoVerse Museum - Web Preview",
-    "entrance": (0.5, 65, 21.5),
-    "chunks": (range(-5, 5), range(-8, 5)),
-    "replace": REPLACE_BLOCKS,
-    "required": {"minecraft:quartz_pillar", "minecraft:cyan_terracotta"},
-}
-FULL_TOUR = {
-    "name": "MujoVerse Full Tour - Web Preview",
-    "entrance": (0.5, -60, 20.5),
-    # All 11 station floors (centers x=0..800, z=0) and the connecting paths.
-    "chunks": (range(-4, 55), range(-4, 4)),
-    "replace": {**REPLACE_BLOCKS, "minecraft:stone_button": "minecraft:air",
-                "minecraft:oak_wall_sign": "minecraft:air"},
-    "required": {"minecraft:smooth_quartz", "minecraft:green_concrete",
-                 "minecraft:yellow_concrete", "minecraft:sea_lantern"},
 }
 
 
@@ -51,20 +38,19 @@ def encode_nbt(root):
     return out.getvalue()
 
 
-def export_level(path, world):
+def export_level(path):
     original = nbtlib.load(path)["Data"]
     if original["DataVersion"] != DATA_VERSION:
         raise ValueError("Expected a Minecraft Java 1.21.1 save")
     generator = original["WorldGenSettings"]["dimensions"]["minecraft:overworld"]["generator"]
     if generator["type"] != "minecraft:flat":
-        raise ValueError("Expected a built superflat demo world")
-    entrance = world["entrance"]
+        raise ValueError("Expected the built superflat museum")
     data = nbtlib.Compound({key: original[key] for key in LEVEL_FIELDS})
     data.update(
-        LevelName=nbtlib.String(world["name"]),
-        SpawnX=nbtlib.Int(entrance[0]),
-        SpawnY=nbtlib.Int(entrance[1]),
-        SpawnZ=nbtlib.Int(entrance[2]),
+        LevelName=nbtlib.String("MujoVerse Museum - Web Preview"),
+        SpawnX=nbtlib.Int(ENTRANCE[0]),
+        SpawnY=nbtlib.Int(ENTRANCE[1]),
+        SpawnZ=nbtlib.Int(ENTRANCE[2]),
         SpawnAngle=nbtlib.Float(180),
         generatorName=nbtlib.String("flat"),
         GameType=nbtlib.Int(2),
@@ -90,7 +76,7 @@ def export_level(path, world):
             "XpTotal": nbtlib.Int(0),
             "SelectedItemSlot": nbtlib.Int(0),
             "Dimension": nbtlib.String("minecraft:overworld"),
-            "Pos": nbtlib.List[nbtlib.Double](entrance),
+            "Pos": nbtlib.List[nbtlib.Double](ENTRANCE),
             "Rotation": nbtlib.List[nbtlib.Float]([128, 0]),
             "OnGround": nbtlib.Byte(1),
             "abilities": nbtlib.Compound({"flying": nbtlib.Byte(0)}),
@@ -100,19 +86,18 @@ def export_level(path, world):
     return gzip.compress(encode_nbt(nbtlib.File({"Data": data})), mtime=0)
 
 
-def export_region(source, x_region, z_region, world):
+def export_region(source, x_region, z_region):
     header = bytearray(2 * SECTOR)
     body = bytearray()
     blocks = set()
-    chunk_x, chunk_z = world["chunks"]
-    for z in chunk_z:
-        for x in chunk_x:
+    for z in CHUNK_Z:
+        for x in CHUNK_X:
             if (x // 32, z // 32) != (x_region, z_region):
                 continue
             slot = ((z % 32) * 32 + x % 32) * 4
             sector = int.from_bytes(source[slot:slot + 3], "big")
             if sector < 2:
-                raise ValueError(f"Missing demo chunk at {x},{z}")
+                raise ValueError(f"Missing museum chunk at {x},{z}")
             start = sector * SECTOR
             length, codec = struct.unpack_from(">IB", source, start)
             if codec != 2:
@@ -125,9 +110,9 @@ def export_region(source, x_region, z_region, world):
             for section in chunk["sections"]:
                 for state in section.get("block_states", {}).get("palette", []):
                     name = str(state["Name"])
-                    if name in world["replace"]:
+                    if name in REPLACE_BLOCKS:
                         state.clear()
-                        state["Name"] = nbtlib.String(world["replace"][name])
+                        state["Name"] = nbtlib.String(REPLACE_BLOCKS[name])
                     elif not name.startswith("minecraft:"):
                         raise ValueError(f"Non-vanilla block {name} in chunk {x},{z}")
                     blocks.add(str(state["Name"]))
@@ -149,25 +134,18 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("save", type=Path)
     parser.add_argument("output", type=Path)
-    parser.add_argument("--full-tour", action="store_true", help="export the standalone 11-station playtest save")
     args = parser.parse_args()
-    world = FULL_TOUR if args.full_tour else MUSEUM
-    if args.full_tour:
-        marker = args.save / "mujotour-built.json"
-        if not marker.is_file() or json.loads(marker.read_text(encoding="utf-8")).get("zones") != 11:
-            raise ValueError("Expected the built MujoVerse Full Tour save with 11 stations")
     if any(path.resolve().is_relative_to(args.save.resolve())
            for path in (args.output, args.output.with_suffix(""))):
         raise ValueError("Write the preview outside the source save")
-    files = {"level.dat": export_level(args.save / "level.dat", world)}
+    files = {"level.dat": export_level(args.save / "level.dat")}
     blocks = set()
-    chunk_x, chunk_z = world["chunks"]
-    for x, z in sorted({(x // 32, z // 32) for x in chunk_x for z in chunk_z}):
+    for x, z in sorted({(x // 32, z // 32) for x in CHUNK_X for z in CHUNK_Z}):
         name = f"region/r.{x}.{z}.mca"
-        files[name], region_blocks = export_region((args.save / name).read_bytes(), x, z, world)
+        files[name], region_blocks = export_region((args.save / name).read_bytes(), x, z)
         blocks.update(region_blocks)
-    if not world["required"] <= blocks:
-        raise ValueError(f"The cropped area does not contain {world['name']}")
+    if not {"minecraft:quartz_pillar", "minecraft:cyan_terracotta"} <= blocks:
+        raise ValueError("The cropped area does not contain the built museum")
     # The client can fetch this read-only index regardless of the host's ZIP MIME type.
     directory = args.output.with_suffix("")
     index = {"level.dat": None, "region": {}}
@@ -185,7 +163,7 @@ def main():
     payload = archive.getvalue()
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_bytes(payload)
-    print(f"{len(chunk_x) * len(chunk_z)} chunks, {len(files)} files, {len(payload)} bytes")
+    print(f"{len(CHUNK_X) * len(CHUNK_Z)} chunks, {len(files)} files, {len(payload)} bytes")
     print(f"SHA-256 {hashlib.sha256(payload).hexdigest()}")
 
 

@@ -11,11 +11,11 @@ const base = lang === 'zh' ? '' : '/en';
 const t = {
 	zh: {
 		htmlLang: 'zh-CN', switchLabel: 'EN', switchHref: '/en/',
-		nav: [['文档', '/guide/install/'], ['博物馆', '#museum'], ['模组试玩', '/playtest/'], ['开发者', '#dev'], ['GitHub', 'https://github.com/MujoVerse']],
+		nav: [['文档', '/guide/install/'], ['博物馆', '#museum'], ['开发者', '#dev'], ['GitHub', 'https://github.com/MujoVerse']],
 		kicker: 'MuJoCo × Minecraft · 开源模组系列',
 		title: ['真实的机器人，', '真实的物理，', '在你的世界里。'],
 		lede: '每个关节都由电机力矩驱动，每一步都由学习型控制器决定，MuJoCo 每 2 毫秒解一次接触。没有一帧是动画。',
-		cta1: '网页逛馆', ctaPlaytest: '进入全功能试玩地图',
+		cta1: '网页逛馆',
 		chips: ['Fabric 1.21.1', 'Windows · Linux · macOS', '5 台实时机器人 + 33 款展品', '免费开源'],
 		hudRobot: 'T2 · 31 自由度 · WALK', hudCaption: 'WALK 控制器带球进门',
 		notAnim: '这一锤不是动画',
@@ -72,11 +72,11 @@ const t = {
 	},
 	en: {
 		htmlLang: 'en', switchLabel: '中文', switchHref: '/',
-		nav: [['Docs', '/en/guide/install/'], ['Museum', '#museum'], ['Mod playtest', '/en/playtest/'], ['Developers', '#dev'], ['GitHub', 'https://github.com/MujoVerse']],
+		nav: [['Docs', '/en/guide/install/'], ['Museum', '#museum'], ['Developers', '#dev'], ['GitHub', 'https://github.com/MujoVerse']],
 		kicker: 'MuJoCo × Minecraft · open-source mod series',
 		title: ['Real robots.', 'Real physics.', 'In your world.'],
 		lede: 'Every joint is driven by motor torque, every step chosen by a learned controller, and MuJoCo solves contacts every 2 ms. Not a single frame is animation.',
-		cta1: 'Tour in browser', ctaPlaytest: 'Explore the Full Tour',
+		cta1: 'Tour in browser',
 		chips: ['Fabric 1.21.1', 'Windows · Linux · macOS', '5 live robots + 33 exhibits', 'Free & open source'],
 		hudRobot: 'T2 · 31 DoF · WALK', hudCaption: 'The WALK controller dribbles the ball into the goal',
 		notAnim: 'This hit is not an animation',
@@ -153,7 +153,7 @@ const frames = ['0.0', '0.8', '2.0', '3.2', '4.8', '5.6', '6.4'];
 			<img src="/avatar-256.png" alt="" width="30" height="30" /><span>MujoVerse</span>
 		</a>
 		<nav>
-			{t.nav.map(([label, href]) => <a href={href} class:list={[{ 'demo-link': href === '#museum' || href.endsWith('/playtest/') }]}>{label}</a>)}
+			{t.nav.map(([label, href]) => <a href={href} class:list={[{ 'demo-link': href === '#museum' }]}>{label}</a>)}
 			<a class="lang" href={t.switchHref}>{t.switchLabel}</a>
 		</nav>
 	</header>
@@ -165,8 +165,7 @@ const frames = ['0.0', '0.8', '2.0', '3.2', '4.8', '5.6', '6.4'];
 				<h1>{t.title.map((line, i) => <span style={`--d:${i * 120}ms`}>{line}</span>)}</h1>
 				<p class="lede">{t.lede}</p>
 				<div class="ctas">
-					<a class="btn primary" href={`${base}/playtest/`}>{t.ctaPlaytest} →</a>
-					<a class="btn" href={`${base}/demo/`}>{t.cta1}</a>
+					<a class="btn primary" href={`${base}/demo/`}>{t.cta1} →</a>
 					<a class="btn" href={`${base}/guide/museum/`}>{t.museumGuide}</a>
 				</div>
 				<ul class="chips">{t.chips.map((c) => <li>{c}</li>)}</ul>

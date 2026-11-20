@@ -6,6 +6,7 @@
     "dev": "astro dev",
     "start": "astro dev",
     "build": "astro build",
+    "test:playtest": "node --test scripts/test-tower-simulation.mjs",
     "preview": "astro preview",
     "astro": "astro"
   },
@@ -14,7 +15,10 @@
     "@fontsource/ibm-plex-mono": "^5.3.0",
     "@fontsource/ibm-plex-sans": "^5.3.0",
     "@fontsource/unbounded": "^5.3.0",
+    "@lucide/astro": "1.76.0",
+    "@mujoco/mujoco": "3.8.0",
     "astro": "^7.3.6",
-    "sharp": "^0.35.3"
+    "sharp": "^0.35.3",
+    "three": "0.187.0"
   }
 }

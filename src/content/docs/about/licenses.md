@@ -39,9 +39,3 @@ description: "四个模组的许可证，以及机器人模型、动作和运行
 ## 博物馆精装版
 
 精装版整合包里的装饰模组、Sodium、Iris 和 Complementary 光影由整合包从 Modrinth 下载，遵循各自的许可证，不包含在我们分发的文件里。
-
-## 网页模组试玩
-
-- [MuJoCo 3.8 WebAssembly（Apache-2.0）](/licenses/playtest/mujoco.txt)
-- [Three.js（MIT）](/licenses/playtest/three.txt)
-- [Lucide（ISC，含 Feather 的 MIT 声明）](/licenses/playtest/lucide.txt)

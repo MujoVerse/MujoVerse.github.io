@@ -1,35 +1,46 @@
 ---
-const { lang } = Astro.props;
+interface Props { lang: 'zh' | 'en'; world?: 'museum' | 'full-tour' }
+const { lang, world = 'museum' } = Astro.props;
 const zh = lang === 'zh';
+const fullTour = world === 'full-tour';
 const home = zh ? '/' : '/en/';
+const prefix = fullTour ? 'playtest' : 'museum';
+const path = fullTour ? '/worlds/full-tour-preview' : '/worlds/museum-preview';
+const poster = fullTour ? '/media/full-tour-preview.png' : '/media/museum-facade.webp';
+const alternate = zh ? '/en/playtest/' : '/playtest/';
 const t = zh ? {
-	title: 'MujoVerse 博物馆 · 网页试玩',
-	preview: '原版方块版 · 1.21.1',
+	title: fullTour ? 'MujoVerse 全功能试玩' : 'MujoVerse 博物馆 · 网页试玩',
+	preview: fullTour ? '试玩存档预览 · 1.21.1' : '原版方块版 · 1.21.1',
 	back: '返回首页',
-	enter: '进入展馆',
+	enter: fullTour ? '进入试玩地图' : '进入展馆',
 	tab: '在新标签页打开',
 	reset: '退出试玩',
 	guide: '下载桌面模组试玩',
 	credit: '浏览器客户端源码',
-	note: '这里可以参观馆舍与方块建筑。本导览不加载桌面存档里的机器人实体、物理机关或 FPV 飞行。',
+	note: fullTour
+		? '从原试玩存档的出发大厅进入，沿路可走访 11 站。机器人、物理机关和模组按钮仍需在桌面实例中运行。'
+		: '这里可以参观馆舍与方块建筑。本导览不加载桌面存档里的机器人实体、物理机关或 FPV 飞行。',
 	load: '正在打开试玩客户端。如长时间停留，可在新标签页打开。',
 	download: '下载网页预览存档',
+	poster: '桌面版 · 出发大厅',
 } : {
-	title: 'MujoVerse Museum · Web Demo',
-	preview: 'Vanilla-block edition · 1.21.1',
+	title: fullTour ? 'MujoVerse Full Tour' : 'MujoVerse Museum · Web Demo',
+	preview: fullTour ? 'Playtest world preview · 1.21.1' : 'Vanilla-block edition · 1.21.1',
 	back: 'Back to homepage',
-	enter: 'Enter the museum',
+	enter: fullTour ? 'Enter the playtest world' : 'Enter the museum',
 	tab: 'Open in a new tab',
 	reset: 'Exit demo',
 	guide: 'Download the desktop mod demo',
 	credit: 'Web client source',
-	note: 'Explore the museum building and its block-built exhibits. This tour does not load the desktop save’s robot entities, physics exhibits or FPV flight.',
+	note: fullTour
+		? 'Start in the original playtest lobby and walk through all 11 stations. Robots, physics and mod controls still require the desktop instance.'
+		: 'Explore the museum building and its block-built exhibits. This tour does not load the desktop save’s robot entities, physics exhibits or FPV flight.',
 	load: 'Opening the game client. If it stalls, try opening it in a new tab.',
 	download: 'Download preview world',
+	poster: 'Desktop edition · Start lobby',
 };
-const worldPath = '/worlds/museum-preview.zip';
 const client = new URL('https://v2.4.0.mcraft.fun/');
-client.searchParams.set('mapDir', new URL('/worlds/museum-preview/index.json', Astro.site).href);
+client.searchParams.set('mapDir', new URL(`${path}/index.json`, Astro.site).href);
 client.searchParams.set('noSave', 'true');
 client.searchParams.append('serverSetting', 'gameMode:2');
 client.searchParams.append('serverSetting', 'everybody-op:false');
@@ -43,12 +54,16 @@ client.searchParams.append('setting', `localUsername:${JSON.stringify('Visitor')
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<title>{t.title}</title>
+	<meta name="description" content={t.note} />
 	<link rel="icon" href="/favicon-48.png" />
 </head>
 <body>
 	<header>
 		<a href={home}><img src="/avatar-256.png" width="30" height="30" alt="" />MujoVerse</a>
-		<a class="back" href={home}>{t.back}</a>
+		<div class="header-links">
+			{fullTour && <a class="back" href={alternate} lang={zh ? 'en' : 'zh-CN'}>{zh ? 'English' : '简体中文'}</a>}
+			<a class="back" href={home}>{t.back}</a>
+		</div>
 	</header>
 	<main>
 		<div class="intro">
@@ -56,24 +71,26 @@ client.searchParams.append('setting', `localUsername:${JSON.stringify('Visitor')
 			<h1>{t.title}</h1>
 			<p>{t.note}</p>
 		</div>
-		<div class="stage" id="museum-stage">
-			<img src="/media/museum-facade.webp" alt="" width="1280" height="720" />
-			<button class="enter" id="museum-enter" type="button" data-client={client.href}
+		<div class="stage" id={`${prefix}-stage`} data-world-stage>
+			<img src={poster} alt="" width={fullTour ? 1600 : 1280} height={fullTour ? 900 : 720} />
+			{fullTour && <span class="poster-label" data-poster-label>{t.poster}</span>}
+			<button class="enter" id={`${prefix}-enter`} type="button" data-world-enter data-client={client.href}
 				data-title={t.title} data-loading={t.load}>{t.enter}</button>
 		</div>
 		<div class="actions">
-			<button id="museum-exit" type="button" hidden>{t.reset}</button>
-			<a id="museum-tab" href={client.href} target="_blank" rel="noopener noreferrer">{t.tab}</a>
-			<a href={worldPath} download>{t.download}</a>
-			<a href={`${home}guide/museum/`}>{t.guide}</a>
+			<button id={`${prefix}-exit`} data-world-exit type="button" hidden>{t.reset}</button>
+			<a id={`${prefix}-tab`} href={client.href} target="_blank" rel="noopener noreferrer">{t.tab}</a>
+			<a href={`${path}.zip`} download>{t.download}</a>
+			{!fullTour && <a href={`${home}guide/museum/`}>{t.guide}</a>}
 			<a href="https://github.com/zardoy/minecraft-web-client/tree/v2.4.0">{t.credit}</a>
 		</div>
 	</main>
 	<script>
-		const stage = document.querySelector<HTMLDivElement>('#museum-stage')!;
-		const enter = document.querySelector<HTMLButtonElement>('#museum-enter')!;
-		const exit = document.querySelector<HTMLButtonElement>('#museum-exit')!;
+		const stage = document.querySelector<HTMLDivElement>('[data-world-stage]')!;
+		const enter = document.querySelector<HTMLButtonElement>('[data-world-enter]')!;
+		const exit = document.querySelector<HTMLButtonElement>('[data-world-exit]')!;
 		const poster = stage.querySelector('img')!;
+		const posterLabel = stage.querySelector<HTMLElement>('[data-poster-label]');
 		let frame: HTMLIFrameElement | undefined;
 
 		enter.addEventListener('click', () => {
@@ -90,6 +107,7 @@ client.searchParams.append('setting', `localUsername:${JSON.stringify('Visitor')
 			loading.textContent = enter.dataset.loading!;
 			frame.addEventListener('load', () => loading.remove(), { once: true });
 			poster.hidden = enter.hidden = true;
+			if (posterLabel) posterLabel.hidden = true;
 			exit.hidden = false;
 			stage.append(loading, frame);
 			exit.focus();
@@ -101,6 +119,7 @@ client.searchParams.append('setting', `localUsername:${JSON.stringify('Visitor')
 			stage.querySelector('.loading')?.remove();
 			exit.hidden = true;
 			poster.hidden = enter.hidden = false;
+			if (posterLabel) posterLabel.hidden = false;
 			enter.focus();
 		});
 	</script>
@@ -113,6 +132,7 @@ client.searchParams.append('setting', `localUsername:${JSON.stringify('Visitor')
 	body { margin: 0; }
 	header { display: flex; justify-content: space-between; align-items: center; padding: 12px 24px; border-bottom: 1px solid #333e46; }
 	header a { display: flex; align-items: center; gap: 10px; font-weight: 700; text-decoration: none; color: inherit; }
+	.header-links { display: flex; flex-wrap: wrap; justify-content: end; gap: 6px 16px; }
 	header .back { font-size: .875rem; color: #c1ccd3; }
 	main { padding: 0 0 24px; }
 	.intro, .actions { width: min(100% - 32px, 1120px); margin-inline: auto; }
@@ -123,6 +143,7 @@ client.searchParams.append('setting', `localUsername:${JSON.stringify('Visitor')
 	.stage { position: relative; background: #1b272b; width: 100%; height: clamp(380px, 65svh, 920px); }
 	.stage img, .stage iframe { display: block; width: 100%; height: 100%; object-fit: cover; border: 0; }
 	.stage iframe { position: absolute; inset: 0; }
+	.poster-label { position: absolute; top: 12px; left: 16px; background: #101418dd; padding: 6px 10px; border-radius: 4px; font-size: .75rem; }
 	.stage > .loading { position: absolute; z-index: 1; bottom: 12px; left: 12px; right: 12px; margin: 0; padding: 8px 12px; background: #14191d; pointer-events: none; }
 	button { font: inherit; font-weight: 650; padding: 10px 16px; border-radius: 6px; cursor: pointer; }
 	.enter { position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%); white-space: nowrap; background: #58dfcb; color: #122924; border: 1px solid #58dfcb; }

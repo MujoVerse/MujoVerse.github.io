@@ -39,9 +39,3 @@ Robot names and brands belong to their owners; their appearance here does not im
 ## Deluxe museum edition
 
 The decoration mods, Sodium, Iris and the Complementary shaders in the deluxe modpack are downloaded from Modrinth by the modpack, keep their own licences, and are not part of the files we distribute.
-
-## Browser mod playtest
-
-- [MuJoCo 3.8 WebAssembly (Apache-2.0)](/licenses/playtest/mujoco.txt)
-- [Three.js (MIT)](/licenses/playtest/three.txt)
-- [Lucide (ISC, with the Feather MIT notice)](/licenses/playtest/lucide.txt)
